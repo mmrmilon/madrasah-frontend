@@ -83,7 +83,7 @@ const Sidebar = () => {
         }`}
       >
         <Image
-          src="/logo.png"
+          src="/madrasah_logo.png"
           alt="madrasah-logo"
           width={27}
           height={27}

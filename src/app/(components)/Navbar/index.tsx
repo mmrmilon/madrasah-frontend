@@ -79,6 +79,11 @@ const Navbar = () => {
         <Link href="/settings">
           <Settings className="cursor-pointer text-gray-500" size={24} />
         </Link>
+        <Link href="/login">
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Login
+          </button>
+        </Link>
       </div>
     </div>
   );

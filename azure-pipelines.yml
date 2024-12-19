@@ -21,7 +21,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build and push stage
+  displayName: Build and Push Image
   jobs:
   - job: Build
     displayName: Build
@@ -30,16 +30,17 @@ stages:
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+      inputs:        
         containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)
+        command: buildAndPush
+        dockerfile: $(dockerfilePath)
+        buildContext: '$(System.DefaultWorkingDirectory)'
         tags: |
           $(tag)
-
+          latest
 - stage: Publish
-  displayName: Publish Container Repository
+  displayName: Publish To App Service
   jobs:
   - job: Publish
     displayName: Publish

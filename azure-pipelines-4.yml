@@ -1,0 +1,12 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: 'Pay-As-You-Go(b9772cc4-0abc-49ed-87a3-df33b6fa33ed)'
+    appName: 'madrasah-web'
+    containers: 'madrasahwebacr.azurecr.io/madrasahweb:latest'

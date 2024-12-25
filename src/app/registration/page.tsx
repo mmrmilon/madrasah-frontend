@@ -1,10 +1,8 @@
 "use client";
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../auth/authActions';
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/app/redux";
-import { redirect } from 'next/navigation'
+import { useAppDispatch } from "@/app/redux";
+import { useRouter } from 'next/navigation'
 import {
   TextField,
   Button,
@@ -16,13 +14,11 @@ import {
 } from '@mui/material';
 
 const Register = () => {
-  const dispatch = useAppDispatch();
-  //const navigate = useNavigate();
-  //const { loading, error } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();  
+  const router = useRouter()
   const [error] = useState("");
   const [loading] = useState("");
-  const [passwordError, setPasswordError] = useState(''); // Error for mismatched passwords
-
+  const [passwordError, setPasswordError] = useState('')
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -47,8 +43,7 @@ const Register = () => {
     dispatch(registerUser(formData)).then((action) => {
         console.log(action)
       if (action.meta.requestStatus === 'fulfilled') {
-        //redirect('/login')
-        //navigate('/login')
+        router.push('/login');
       }
     })
   }

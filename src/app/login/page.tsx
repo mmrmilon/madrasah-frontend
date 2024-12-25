@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { useAppDispatch, useAppSelector } from "@/app/redux";
+import React, { useState } from "react";
+import { useAppDispatch } from "@/app/redux";
+import { useRouter } from 'next/navigation'
 import {
     Box,
     TextField,
@@ -17,13 +16,11 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { userLogin } from '../auth/authActions';
-import { ActionPathnameNormalizer } from "next/dist/server/future/normalizers/request/action";
 
 const Login = () => {
     const [error, setError] = useState("");
-
-    //const { loading, userInfo } = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         username: '',
@@ -44,71 +41,78 @@ const Login = () => {
         dispatch(userLogin(formData)).then((action) => {
             console.log(action);
             if (action.meta.requestStatus === 'fulfilled') {
-               // navigate('/login'); 
-               //location.href = '/'
-            } 
+                router.push('/');                
+            } else {
+                setError('Login failed')
+            }
         })
     }
 
     return (
         <Container maxWidth="sm">
             <CssBaseline />
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                Sign In
-            </Typography>
-            <form onSubmit={handleSubmit}>
-                <Box display="flex" flexDirection="column" gap={2}>
-                    <TextField
-                        label="User Name"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                    />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}>
+                <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign In
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <Box display="flex" flexDirection="column" gap={2} sx={{ mt: 1 }}>
+                        <TextField
+                            label="User Name"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                        />
 
-                    <TextField
-                        label="Password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                    />
-                    {error && (
-                        <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                            {error}
-                        </Typography>
-                    )}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
+                        <TextField
+                            label="Password"
+                            name="password"
+                            type="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                        />
+                        {error && (
+                            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                                {error}
+                            </Typography>
+                        )}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign In
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </form>
+                    </Box>
+                </form>
+            </Box>
         </Container>
-
-
     );
 };
 

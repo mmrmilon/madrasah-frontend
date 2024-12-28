@@ -3,7 +3,7 @@
 import Header from "@/app/(components)/Header";
 import { toast } from "react-hot-toast";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import StudentFormModal from "@/app/(components)/StudentFormModal";
 import { 
@@ -128,6 +128,12 @@ const Students = () => {
 
   // Use API data if available, fallback to local data if not
   const students = apiStudents || fallbackStudents;
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Failed to fetch textbooks.");
+    }
+  }, [error]);
 
   const handleRowSelectionChange = (newSelection: GridRowSelectionModel) => {
     setSelectedRows(newSelection);

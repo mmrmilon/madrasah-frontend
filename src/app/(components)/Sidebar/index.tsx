@@ -11,7 +11,8 @@ import {
   BookUser,
   FileUser,
   MonitorCheck,
-  BookText
+  BookText,
+  BookOpen
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -137,6 +138,12 @@ const Sidebar = () => {
           label="Subjects"
           isCollapsed={isSidebarCollapsed}
         />
+        <SidebarLink 
+          href="/textbooks" 
+          icon={BookOpen}
+          label="Textbooks"
+          isCollapsed={isSidebarCollapsed}
+        />
         <SidebarLink
           href="/users"
           icon={User}
@@ -148,7 +155,7 @@ const Sidebar = () => {
           icon={SlidersHorizontal}
           label="Settings"
           isCollapsed={isSidebarCollapsed}
-        />
+        />        
       </div>
 
       {/* FOOTER */}

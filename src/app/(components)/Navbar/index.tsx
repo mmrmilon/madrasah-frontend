@@ -1,18 +1,20 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
-import { setIsDarkMode, setIsSidebarCollapsed } from "@/state";
-import { Bell, Menu, Moon, Settings, Sun } from "lucide-react";
+import { setIsDarkMode, setIsSidebarCollapsed, logout } from "@/state";
+import { Bell, Menu, Moon, Sun } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const isSidebarCollapsed = useAppSelector(
     (state) => state.global.isSidebarCollapsed
   );
   const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+  const username = useAppSelector((state) => state.global.username);
 
   const toggleSidebar = () => {
     dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
@@ -20,6 +22,11 @@ const Navbar = () => {
 
   const toggleDarkMode = () => {
     dispatch(setIsDarkMode(!isDarkMode));
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/login");
   };
 
   return (
@@ -73,17 +80,15 @@ const Navbar = () => {
               height={50}
               className="rounded-full h-full object-cover"
             />
-            <span className="font-semibold">Rakib</span>
+            <span className="font-semibold">{username || 'Guest'}</span>
           </div>
         </div>
-        <Link href="/settings">
-          <Settings className="cursor-pointer text-gray-500" size={24} />
-        </Link>
-        <Link href="/login">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-            Login
-          </button>
-        </Link>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

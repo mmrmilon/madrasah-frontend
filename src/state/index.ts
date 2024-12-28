@@ -5,6 +5,7 @@ export interface InitialStateTypes {
   isDarkMode: boolean;
   isAuthenticated: boolean;
   token: string | null;
+  username: string | null;
 }
 
 const initialState: InitialStateTypes = {
@@ -12,6 +13,7 @@ const initialState: InitialStateTypes = {
   isDarkMode: false,
   isAuthenticated: false,
   token: null,
+  username: null,
 };
 
 export const globalSlice = createSlice({
@@ -24,12 +26,14 @@ export const globalSlice = createSlice({
     setIsDarkMode: (state, action: PayloadAction<boolean>) => {
       state.isDarkMode = action.payload;
     },
-    setCredentials: (state, action: PayloadAction<{ token: string }>) => {
+    setCredentials: (state, action: PayloadAction<{ token: string; username: string }>) => {
       state.token = action.payload.token;
+      state.username = action.payload.username;
       state.isAuthenticated = true;
     },
     logout: (state) => {
       state.token = null;
+      state.username = null;
       state.isAuthenticated = false;
     },
   },

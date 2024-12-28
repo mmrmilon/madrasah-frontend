@@ -20,7 +20,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     try {
       const result = await login({ username, password }).unwrap();
-      dispatch(setCredentials({ token: result.token }));
+      dispatch(setCredentials({ 
+        token: result.token,
+        username: username
+      }));
       router.push("/dashboard");
     } catch (err) {
       setError("Invalid credentials. Please try again.");

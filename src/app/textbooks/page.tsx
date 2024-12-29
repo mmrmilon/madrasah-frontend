@@ -14,7 +14,7 @@ import {
 
 
 const columns: GridColDef[] = [
-    { field: 'bookId', headerName: 'ID', width: 100 },
+    { field: 'id', headerName: 'ID', width: 100 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'description', headerName: 'Description', width: 300 },
     { field: 'authorName', headerName: 'Author', width: 200 },
@@ -22,13 +22,13 @@ const columns: GridColDef[] = [
 
 const fallbackTextbooks = [
     {
-        bookId: "1",
+        id: "1",
         name: "Book Title 1",
         description: "Description of Book 1",
         authorName: "Author 1"
       },
       {
-        bookId: "2",
+        id: "2",
         name: "Book Title 2",
         description: "Description of Book 2",
         authorName: "Author 2"
@@ -68,7 +68,7 @@ const Textbooks = () => {
   };
 
   const handleEdit = () => {
-    const selectedTextbook = textbooks.find(book => book.bookId === selectedRows[0]);    
+    const selectedTextbook = textbooks.find(book => book.id === selectedRows[0]);    
     if (!selectedTextbook) {      
       setModalMode('edit');
       setEditData(selectedTextbook || null);
@@ -126,7 +126,7 @@ const Textbooks = () => {
         await addTextbook(formData).unwrap();
       } else {
         await editTextbook({
-          id: formData.bookId,
+          id: formData.id,
           textbook: formData
         }).unwrap();
       }
@@ -170,7 +170,7 @@ const Textbooks = () => {
       <DataGrid
         rows={textbooks}
         columns={columns}
-        getRowId={(row) => row.bookId}
+        getRowId={(row) => row.id}
         checkboxSelection
         onRowSelectionModelChange={handleRowSelectionChange}
         className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700"

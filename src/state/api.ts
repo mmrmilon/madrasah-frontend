@@ -30,6 +30,12 @@ interface Textbook {
     authorName: string;
 }
 
+interface Batches {
+  batchId?: string; 
+  year: string;
+  session: string;
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({ 
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -47,7 +53,7 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Auth", "Students", "Textbooks"],
+  tagTypes: ["Auth", "Students", "Textbooks", "Batches"],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -133,6 +139,42 @@ export const api = createApi({
     fetchTextbookById: builder.query<Textbook, string>({
       query: (id) => `/textbooks/${id}`,
     }),
+
+    fetchAllBatches: builder.query<Batches[], void>({
+      query: () => '/batches',
+      providesTags: ['Batches'],
+    }),
+
+    addBatch: builder.mutation<Batches, Partial<Batches>>({
+      query: (batch) => ({
+        url: '/batches',
+        method: 'POST',
+        body: batch,
+      }),
+      invalidatesTags: ['Batches'],
+    }),
+
+    editBatch: builder.mutation<Batches, { id: string; batch: Partial<Batches> }>({
+      query: ({ id, batch }) => ({
+        url: `/batches/${id}`,
+        method: 'PUT',
+        body: batch,
+      }),
+      invalidatesTags: ['Batches'],
+    }),
+
+    deleteBatch: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/batches/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Batches'],
+    }),
+
+    fetchBatchById: builder.query<Batches, string>({
+      query: (id) => `/batches/${id}`,
+    })
+
   }),
 });
 
@@ -148,6 +190,10 @@ export const {
   useEditTextbookMutation,
   useDeleteTextbookMutation,
   useFetchTextbookByIdQuery,
+  useFetchAllBatchesQuery,
+  useAddBatchMutation,
+  useEditBatchMutation,
+  useDeleteBatchMutation,
 } = api;
 
 export default api;

@@ -75,7 +75,7 @@ const Textbooks = () => {
       setIsModalOpen(true);
     }
     else{
-      toast.error('No student found with the selected ID');
+      toast.error('No textbook found with the selected ID');
       return;
     }
   };
@@ -115,8 +115,8 @@ const Textbooks = () => {
         position: 'top-center',
       });
     } catch (error) {
-      console.error('Error deleting students:', error);
-      toast.error('Failed to delete students. Please try again.');
+      console.error('Error deleting textbook:', error);
+      toast.error('Failed to delete textbook. Please try again.');
     }
   };
 

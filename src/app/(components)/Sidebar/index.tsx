@@ -12,7 +12,9 @@ import {
   FileUser,
   MonitorCheck,
   BookText,
-  BookOpen
+  BookOpen,
+  GroupIcon,
+  BookDashedIcon
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -124,6 +126,18 @@ const Sidebar = () => {
           href="/students"
           icon={FileUser}
           label="Students"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/batches"
+          icon={GroupIcon}
+          label="Batches"
+          isCollapsed={isSidebarCollapsed}
+        />
+        <SidebarLink
+          href="/courses"
+          icon={BookDashedIcon}
+          label="Courses"
           isCollapsed={isSidebarCollapsed}
         />
         <SidebarLink

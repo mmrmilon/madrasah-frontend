@@ -21,7 +21,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const result = await login({ username, password }).unwrap();
       dispatch(setCredentials({ 
-        token: result.token,
+        token: result.access_token,
         username: username
       }));
       router.push("/dashboard");

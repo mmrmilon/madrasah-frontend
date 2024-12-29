@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "./store";
+import { RootState } from "@/app/redux";
 
 interface LoginRequest {
   username: string;
@@ -7,7 +7,7 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
-  token: string;
+  access_token: string;
 }
 
 interface Student {
@@ -24,10 +24,19 @@ interface Student {
 }
 
 interface Textbook {
-    bookId?: string; 
+    id?: string; 
     name: string;
     description: string;
     authorName: string;
+}
+
+interface Subject {
+  id?: string; 
+  name: string;
+  code: string;
+  description: string;
+  //credit: number;
+  textbook_id: string;  
 }
 
 interface Batches {
@@ -53,7 +62,7 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Auth", "Students", "Textbooks", "Batches"],
+  tagTypes: ["Auth", "Students", "Textbooks", "Subject", "Batches"],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -106,8 +115,11 @@ export const api = createApi({
     }),
 
     fetchAllTextbooks: builder.query<Textbook[], void>({
-      query: () => '/alltextbooks',
-      providesTags: ['Textbooks'],
+       query: () => ({
+            url: '/textbooks',
+            method: 'GET',
+          }),
+          providesTags: ['Textbooks'],
     }),
 
     addTextbook: builder.mutation<Textbook, Partial<Textbook>>({
@@ -138,7 +150,45 @@ export const api = createApi({
 
     fetchTextbookById: builder.query<Textbook, string>({
       query: (id) => `/textbooks/${id}`,
-    }),
+    }),   
+
+    getSubjects: builder.query<Subject[], void>({
+      query: () => ({
+           url: '/subjects',
+           method: 'GET',
+         }),
+         providesTags: ['Subject'],
+   }),
+
+   addSubject: builder.mutation<Subject, Partial<Subject>>({
+     query: (Subject) => ({
+       url: '/subjects',
+       method: 'POST',
+       body: Subject,
+     }),
+     invalidatesTags: ['Subject'],
+   }),
+
+   updateSubject: builder.mutation<Subject, { id: string; subject: Partial<Subject> }>({
+     query: ({ id, subject }) => ({
+       url: `/subjects/${id}`,
+       method: 'PUT',
+       body: subject,
+     }),
+     invalidatesTags: ['Subject'],
+   }),
+
+   deleteSubject: builder.mutation<void, string>({
+     query: (id) => ({
+       url: `/subjects/${id}`,
+       method: 'DELETE',
+     }),
+     invalidatesTags: ['Subject'],
+   }),
+
+   fetchSubjectById: builder.query<Subject, string>({
+     query: (id) => `/subjects/${id}`,
+   }),
 
     fetchAllBatches: builder.query<Batches[], void>({
       query: () => '/batches',
@@ -190,6 +240,11 @@ export const {
   useEditTextbookMutation,
   useDeleteTextbookMutation,
   useFetchTextbookByIdQuery,
+  useGetSubjectsQuery,
+  useAddSubjectMutation,
+  useUpdateSubjectMutation,
+  useDeleteSubjectMutation,  
+  useFetchSubjectByIdQuery,
   useFetchAllBatchesQuery,
   useAddBatchMutation,
   useEditBatchMutation,

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import TextbookFormModal from "@/app/(components)/TextbookFormModal";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import { Textbook } from "@/state/api";
 import {
   useFetchAllTextbooksQuery,
   useAddTextbookMutation,
@@ -12,9 +13,8 @@ import {
   useDeleteTextbookMutation,
 } from "@/state/api";
 
-
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 100 },
+    //{ field: 'id', headerName: 'ID', width: 100 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'description', headerName: 'Description', width: 300 },
     { field: 'authorName', headerName: 'Author', width: 200 },
@@ -39,13 +39,12 @@ const Textbooks = () => {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-  const [editData, setEditData] = useState(null);
+  const [editData, setEditData] = useState<Textbook | null>(null);
 
   const { data: apiTextbooks, isLoading, error } = useFetchAllTextbooksQuery();
   const [addTextbook] = useAddTextbookMutation();
   const [editTextbook] = useEditTextbookMutation();
   const [deleteTextbook] = useDeleteTextbookMutation();
-
   
   // Use API data if available, fallback to local data if not
   const textbooks = apiTextbooks || fallbackTextbooks;
@@ -69,9 +68,10 @@ const Textbooks = () => {
 
   const handleEdit = () => {
     const selectedTextbook = textbooks.find(book => book.id === selectedRows[0]);    
-    if (!selectedTextbook) {      
+    console.log(selectedTextbook);
+    if (selectedTextbook) {      
       setModalMode('edit');
-      setEditData(selectedTextbook || null);
+      setEditData(selectedTextbook);
       setIsModalOpen(true);
     }
     else{
@@ -142,7 +142,7 @@ const Textbooks = () => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-between items-center mb-5">
-        <Header name="Students" />
+        <Header name="Text Books" />
         <div className="flex space-x-2">
           <button
             onClick={handleAdd}

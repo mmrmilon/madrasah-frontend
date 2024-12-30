@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+
 import { 
   useGetSubjectsQuery, 
   useAddSubjectMutation, 
@@ -14,15 +15,14 @@ import {
 } from "@/state/api";
 import SubjectFormModal from "../(components)/SubjectFormModal";
 
-
-const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 120 },
-  { field: "name", headerName: "Name", width: 200 },
-  { field: "code", headerName: "Code", width: 150 },
-  { field: "description", headerName: "Description", width: 200 },
-  { field: "credit", headerName: "Credit Hour", width: 150 },
-  { field: "textbook_id", headerName: "Text Book", width: 200 },  
-];
+export interface SubjectFormData {
+  id?: string; 
+  name: string;
+  code: string;
+  description: string;
+  credit: number;
+  textbookId: string;  
+}
 
 const fallbackSubjects = [
   {
@@ -30,24 +30,24 @@ const fallbackSubjects = [
     "name": "Subject 101",
     "code": "101",
     "description": "Some description",
-    "credit": "2024",
-    "textbook_id": "101",
+    "credit": "2",
+    "textbookId": "101",
   },
   {
     "id": "sub-104",
     "name": "Subject 104",
     "code": "101",
     "description": "Some description",
-    "credit": "2024",
-    "textbook_id": "104",
+    "credit": "3",
+    "textbookId": "104",
   },
   {
     "id": "sub-108",
     "name": "Subject 108",
     "code": "101",
     "description": "Some description",
-    "credit": "2024",
-    "textbook_id": "108",
+    "credit": "4",
+    "textbookId": "108",
   }
 ]
 
@@ -71,7 +71,7 @@ const Subjects = () => {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-  const [editData, setEditData] = useState(null);
+  const [editData, setEditData] = useState<SubjectFormData | null>(null);
 
   // API hooks
   const { data: apiSubjects, isLoading, error } = useGetSubjectsQuery();
@@ -84,6 +84,22 @@ const Subjects = () => {
   const subjects = apiSubjects || fallbackSubjects;
   const textbooks = apiTextbooks || fallbackTextbooks;
 
+  const columns: GridColDef[] = [    
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "code", headerName: "Code", width: 150 },
+    { field: "description", headerName: "Description", width: 200 },
+    { field: "credit", headerName: "Credit Hour", width: 150 },
+    {
+      field: "textbookId",
+      headerName: "Text Book",
+      width: 200,
+      renderCell: (params) => {
+        const textbook = textbooks.find((tb) => tb.id === params.row.textbookId);
+        return <span>{textbook?.name}</span>;
+      },
+    }
+  ];
+  
   useEffect(() => {
     if (error) {
       toast.error("Failed to fetch subjects.");
@@ -104,9 +120,9 @@ const Subjects = () => {
   
   const handleEdit = () => {
     const selectedSubject = subjects.find(subject => subject.id === selectedRows[0]);    
-    if (!selectedSubject) {      
+    if (selectedSubject) {      
       setModalMode('edit');
-      setEditData(selectedSubject || null);
+      setEditData(selectedSubject);
       setIsModalOpen(true);
     }
     else{
@@ -155,13 +171,13 @@ const Subjects = () => {
     }
   };
 
-  const handleModalSubmit = async (formData: any) => {
+  const handleModalSubmit = async (formData: SubjectFormData) => {
     try {
       if (modalMode === 'add') {
         await addSubject(formData).unwrap();
       } else {
         await updateSubject({
-          id: formData.subjectId,
+          id: formData.id,
           subject: formData
         }).unwrap();
       }

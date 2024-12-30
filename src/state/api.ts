@@ -23,24 +23,24 @@ interface Student {
   isactive: string;
 }
 
-interface Textbook {
+export interface Textbook {
     id?: string; 
     name: string;
     description: string;
     authorName: string;
 }
 
-interface Subject {
+export interface Subject {
   id?: string; 
   name: string;
   code: string;
   description: string;
-  //credit: number;
-  textbook_id: string;  
+  credit: number;
+  textbookId: string;  
 }
 
 interface Batches {
-  batchId?: string; 
+  id?: string; 
   year: string;
   session: string;
 }
@@ -250,5 +250,6 @@ export const {
   useEditBatchMutation,
   useDeleteBatchMutation,
 } = api;
+
 
 export default api;

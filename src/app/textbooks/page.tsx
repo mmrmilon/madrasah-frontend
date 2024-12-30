@@ -14,7 +14,7 @@ import {
 } from "@/state/api";
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 100 },
+    //{ field: 'id', headerName: 'ID', width: 100 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'description', headerName: 'Description', width: 300 },
     { field: 'authorName', headerName: 'Author', width: 200 },
@@ -142,7 +142,7 @@ const Textbooks = () => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-between items-center mb-5">
-        <Header name="Students" />
+        <Header name="Text Books" />
         <div className="flex space-x-2">
           <button
             onClick={handleAdd}

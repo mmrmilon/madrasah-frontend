@@ -13,44 +13,49 @@ import {
   } from "@/state/api";
 
 const columns: GridColDef[] = [
-  { field: "batchId", headerName: "ID", width: 120 },
+  //{ field: "batchId", headerName: "ID", width: 120 },
   { field: "year", headerName: "Year", width: 200 },
   { field: "session", headerName: "Session", width: 200 }
 ];
 
+export interface BatchFormData {
+  year: string;
+  //session: string;
+}
+
 const fallbackBatches = [
     {
-      "batchId": "B2024021001",
+      "id": "B2024021001",
       "year": "2016",
       "session": "2015-2016"
     },
     {
-      "batchId": "B2024021002",
+      "id": "B2024021002",
       "year": "2017",
       "session": "2016-2017"
     },
     {
-      "batchId": "B2024021003",
+      "id": "B2024021003",
       "year": "2018",
       "session": "2017-2018"
     },
     {
-      "batchId": "B2024021004",
+      "id": "B2024021004",
       "year": "2019",
       "session": "2018-2019"
     },
     {
-      "batchId": "B2024021005",
+      "id": "B2024021005",
       "year": "2020",
       "session": "2019-2020"
     },
     {
-      "batchId": "B2024021006",
+      "id": "B2024021006",
       "year": "2021",
       "session": "2020-2021"
     },
     {
-      "batchId": "B2024021007",
+      "id": "B2024021007",
       "year": "2022",
       "session": "2021-2022"
     }
@@ -60,7 +65,7 @@ const Batches = () => {
     const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-    const [editData, setEditData] = useState(null);
+    const [editData, setEditData] = useState<BatchFormData | null>(null);
   
     const { data: apiBatches, isLoading, error } = useFetchAllBatchesQuery();
     const [addBatch] = useAddBatchMutation();
@@ -87,10 +92,10 @@ const Batches = () => {
     };
 
     const handleEdit = () => {
-        const selectedBatch = batches.find(batch => batch.batchId === selectedRows[0]);    
-        if (!selectedBatch) {      
+        const selectedBatch = batches.find(batch => batch.id === selectedRows[0]);    
+        if (selectedBatch) {      
             setModalMode('edit');
-            setEditData(selectedBatch || null);
+            setEditData(selectedBatch);
             setIsModalOpen(true);
         }
         else{
@@ -144,7 +149,7 @@ const Batches = () => {
                 await addBatch(formData).unwrap();
             } else {
                 await editBatch({
-                    id: formData.bookId,
+                    id: formData.id,
                     batch: formData
                 }).unwrap();
             }
@@ -185,7 +190,7 @@ const Batches = () => {
         <DataGrid
         rows={batches}
         columns={columns}
-        getRowId={(row) => row.batchId}
+        getRowId={(row) => row.id}
         checkboxSelection
         className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700"
         onRowSelectionModelChange={handleRowSelectionChange}

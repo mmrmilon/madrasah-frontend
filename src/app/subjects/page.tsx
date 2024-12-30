@@ -15,15 +15,6 @@ import {
 } from "@/state/api";
 import SubjectFormModal from "../(components)/SubjectFormModal";
 
-const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 120 },
-  { field: "name", headerName: "Name", width: 200 },
-  { field: "code", headerName: "Code", width: 150 },
-  { field: "description", headerName: "Description", width: 200 },
-  { field: "credit", headerName: "Credit Hour", width: 150 },
-  { field: "textbookId", headerName: "Text Book", width: 200 },  
-];
-
 export interface SubjectFormData {
   id?: string; 
   name: string;
@@ -93,6 +84,22 @@ const Subjects = () => {
   const subjects = apiSubjects || fallbackSubjects;
   const textbooks = apiTextbooks || fallbackTextbooks;
 
+  const columns: GridColDef[] = [    
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "code", headerName: "Code", width: 150 },
+    { field: "description", headerName: "Description", width: 200 },
+    { field: "credit", headerName: "Credit Hour", width: 150 },
+    {
+      field: "textbookId",
+      headerName: "Text Book",
+      width: 200,
+      renderCell: (params) => {
+        const textbook = textbooks.find((tb) => tb.id === params.row.textbookId);
+        return <span>{textbook?.name}</span>;
+      },
+    }
+  ];
+  
   useEffect(() => {
     if (error) {
       toast.error("Failed to fetch subjects.");
@@ -164,7 +171,7 @@ const Subjects = () => {
     }
   };
 
-  const handleModalSubmit = async (formData: any) => {
+  const handleModalSubmit = async (formData: SubjectFormData) => {
     try {
       if (modalMode === 'add') {
         await addSubject(formData).unwrap();

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-
-interface BatchFormData {
-  year: string;
-  session: string;
-}
+import { BatchFormData } from '@/app/batches/page';
 
 interface BatchFormModalProps {
   isOpen: boolean;
@@ -23,14 +19,14 @@ const BatchFormModal: React.FC<BatchFormModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<BatchFormData>({
     year: '',
-    session: ''
+   // session: ''
   });
 
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
     } else {
-      setFormData({ year: '', session: '' });
+      setFormData({ year: ''});
     }
   }, [initialData, isOpen]);
 
@@ -66,7 +62,7 @@ const BatchFormModal: React.FC<BatchFormModalProps> = ({
                     className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Session</label>
                     <textarea
                     value={formData.session}
@@ -74,7 +70,7 @@ const BatchFormModal: React.FC<BatchFormModalProps> = ({
                     required
                     className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                </div>
+                </div> */}
                 <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200/80">
                     <button type="button" onClick={onClose}
                     className="mr-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition duration-200">

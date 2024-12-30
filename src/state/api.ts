@@ -40,7 +40,7 @@ export interface Subject {
 }
 
 interface Batches {
-  batchId?: string; 
+  id?: string; 
   year: string;
   session: string;
 }

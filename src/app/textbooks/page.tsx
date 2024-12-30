@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import TextbookFormModal from "@/app/(components)/TextbookFormModal";
 import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
+import { Textbook } from "@/state/api";
 import {
   useFetchAllTextbooksQuery,
   useAddTextbookMutation,
   useEditTextbookMutation,
   useDeleteTextbookMutation,
 } from "@/state/api";
-
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -39,13 +39,12 @@ const Textbooks = () => {
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-  const [editData, setEditData] = useState(null);
+  const [editData, setEditData] = useState<Textbook | null>(null);
 
   const { data: apiTextbooks, isLoading, error } = useFetchAllTextbooksQuery();
   const [addTextbook] = useAddTextbookMutation();
   const [editTextbook] = useEditTextbookMutation();
   const [deleteTextbook] = useDeleteTextbookMutation();
-
   
   // Use API data if available, fallback to local data if not
   const textbooks = apiTextbooks || fallbackTextbooks;
@@ -69,9 +68,10 @@ const Textbooks = () => {
 
   const handleEdit = () => {
     const selectedTextbook = textbooks.find(book => book.id === selectedRows[0]);    
-    if (!selectedTextbook) {      
+    console.log(selectedTextbook);
+    if (selectedTextbook) {      
       setModalMode('edit');
-      setEditData(selectedTextbook || null);
+      setEditData(selectedTextbook);
       setIsModalOpen(true);
     }
     else{

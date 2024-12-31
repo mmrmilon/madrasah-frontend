@@ -39,10 +39,17 @@ export interface Subject {
   textbookId: string;  
 }
 
-interface Batches {
+export interface Batches {
   id?: string; 
   year: string;
   session: string;
+}
+
+export interface Classes {
+  id?: string; 
+  name: string;
+  batchId: string;
+  subjectId: string;
 }
 
 export const api = createApi({
@@ -62,7 +69,7 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Auth", "Students", "Textbooks", "Subject", "Batches"],
+  tagTypes: ["Auth", "Students", "Textbooks", "Subject", "Batches","Classes"],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -131,7 +138,7 @@ export const api = createApi({
       invalidatesTags: ['Textbooks'],
     }),
 
-    editTextbook: builder.mutation<Textbook, { id: string; textbook: Partial<Textbook> }>({
+    editTextbook: builder.mutation<Textbook, { id?: string; textbook: Partial<Textbook> }>({
       query: ({ id, textbook }) => ({
         url: `/textbooks/${id}`,
         method: 'PUT',
@@ -161,15 +168,15 @@ export const api = createApi({
    }),
 
    addSubject: builder.mutation<Subject, Partial<Subject>>({
-     query: (Subject) => ({
+     query: (subject) => ({
        url: '/subjects',
        method: 'POST',
-       body: Subject,
+       body: subject,
      }),
      invalidatesTags: ['Subject'],
    }),
 
-   updateSubject: builder.mutation<Subject, { id: string; subject: Partial<Subject> }>({
+   updateSubject: builder.mutation<Subject, { id?: string; subject: Partial<Subject> }>({
      query: ({ id, subject }) => ({
        url: `/subjects/${id}`,
        method: 'PUT',
@@ -223,8 +230,44 @@ export const api = createApi({
 
     fetchBatchById: builder.query<Batches, string>({
       query: (id) => `/batches/${id}`,
-    })
+    }),
+    getClasses: builder.query<Classes[], void>({
+      query: () => ({
+           url: '/classes',
+           method: 'GET',
+         }),
+         providesTags: ['Classes'],
+   }),
 
+   addClass: builder.mutation<Classes, Partial<Classes>>({
+     query: (cls) => ({
+       url: '/classes',
+       method: 'POST',
+       body: cls,
+     }),
+     invalidatesTags: ['Classes'],
+   }),
+
+   updateClass: builder.mutation<Classes, { id?: string; cls: Partial<Classes> }>({
+     query: ({ id, cls }) => ({
+       url: `/classes/${id}`,
+       method: 'PUT',
+       body: cls,
+     }),
+     invalidatesTags: ['Classes'],
+   }),
+
+   deleteClass: builder.mutation<void, string>({
+     query: (id) => ({
+       url: `/classes/${id}`,
+       method: 'DELETE',
+     }),
+     invalidatesTags: ['Classes'],
+   }),
+
+   fetchClassById: builder.query<Classes, string>({
+     query: (id) => `/classes/${id}`,
+   })
   }),
 });
 
@@ -249,6 +292,11 @@ export const {
   useAddBatchMutation,
   useEditBatchMutation,
   useDeleteBatchMutation,
+  useGetClassesQuery,
+  useAddClassMutation,
+  useUpdateClassMutation,
+  useDeleteClassMutation,  
+  useFetchClassByIdQuery,
 } = api;
 
 

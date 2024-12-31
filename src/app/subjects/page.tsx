@@ -30,7 +30,7 @@ const fallbackSubjects = [
     "name": "Subject 101",
     "code": "101",
     "description": "Some description",
-    "credit": "2",
+    "credit": 2,
     "textbookId": "101",
   },
   {
@@ -38,7 +38,7 @@ const fallbackSubjects = [
     "name": "Subject 104",
     "code": "101",
     "description": "Some description",
-    "credit": "3",
+    "credit": 3,
     "textbookId": "104",
   },
   {
@@ -46,7 +46,7 @@ const fallbackSubjects = [
     "name": "Subject 108",
     "code": "101",
     "description": "Some description",
-    "credit": "4",
+    "credit": 4,
     "textbookId": "108",
   }
 ]

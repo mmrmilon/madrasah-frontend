@@ -14,7 +14,7 @@ import {
 } from "@/state/api";
 
 const columns: GridColDef[] = [
-  { field: "studentId", headerName: "ID", width: 120 },
+  { field: "id", headerName: "ID", width: 120 },
   { field: "registrationId", headerName: "Registration ID", width: 120 },
   { field: "name", headerName: "Name", width: 200 },
   { field: "dateofbirth", headerName: "Date of Birth", width: 150 },
@@ -29,7 +29,7 @@ const columns: GridColDef[] = [
 // Keep existing student data as fallback
 const fallbackStudents = [
   {
-    "studentId": "2024021001",
+    "id": "2024021001",
     "registrationId": "S202412R001",
     "name": "Student 101",
     "dateofbirth": "01 Jan, 2012",
@@ -41,7 +41,7 @@ const fallbackStudents = [
     "isactive": "Active",
   },
   {
-    "studentId": "2024021002",
+    "id": "2024021002",
     "registrationId": "S202412R002",
     "name": "Student 102",
     "dateofbirth": "01 Feb, 2012",
@@ -53,7 +53,7 @@ const fallbackStudents = [
     "isactive": "Active",
   },
   {
-    "studentId": "2024021003",
+    "id": "2024021003",
     "registrationId": "S202412R003",
     "name": "Student 103",
     "dateofbirth": "05 Jan, 2012",
@@ -65,7 +65,7 @@ const fallbackStudents = [
     "isactive": "Active",
   },
   {
-    "studentId": "2024021004",
+    "id": "2024021004",
     "registrationId": "S202412R004",
     "name": "Student 104",
     "dateofbirth": "12 Jan, 2012",
@@ -77,7 +77,7 @@ const fallbackStudents = [
     "isactive": "Active",
   },
   {
-    "studentId": "2024021005",
+    "id": "2024021005",
     "registrationId": "S202412R005",
     "name": "Student 105",
     "dateofbirth": "09 Jan, 2012",
@@ -89,7 +89,7 @@ const fallbackStudents = [
     "isactive": "Active",
   },
   {
-    "studentId": "2024021006",
+    "id": "2024021006",
     "registrationId": "S202412R006",
     "name": "Student 106",
     "dateofbirth": "07 Jan, 2012",
@@ -101,7 +101,7 @@ const fallbackStudents = [
     "isactive": "Active",
   },
   {
-    "studentId": "2024021007",
+    "id": "2024021007",
     "registrationId": "S202412R007",
     "name": "Student 107",
     "dateofbirth": "10 Jan, 2012",
@@ -257,7 +257,7 @@ const Students = () => {
       <DataGrid
         rows={students}
         columns={columns}
-        getRowId={(row) => row.studentId}
+        getRowId={(row) => row.id}
         checkboxSelection
         onRowSelectionModelChange={handleRowSelectionChange}
         className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700"

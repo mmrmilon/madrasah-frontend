@@ -52,6 +52,12 @@ export interface Classes {
   subjectId: string;
 }
 
+export interface Courses {
+  id?: string; 
+  name: string;
+  duration: number;
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({ 
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -69,7 +75,7 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Auth", "Students", "Textbooks", "Subject", "Batches","Classes"],
+  tagTypes: ["Auth", "Students", "Textbooks", "Subject", "Batches","Classes","Courses"],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -267,7 +273,43 @@ export const api = createApi({
 
    fetchClassById: builder.query<Classes, string>({
      query: (id) => `/classes/${id}`,
-   })
+   }),
+
+  fetchAllCourses: builder.query<Courses[], void>({
+    query: () => '/courses',
+    providesTags: ['Courses'],
+  }),
+
+  addCourse: builder.mutation<Courses, Partial<Courses>>({
+    query: (course) => ({
+      url: '/courses',
+      method: 'POST',
+      body: course,
+    }),
+    invalidatesTags: ['Courses'],
+  }),
+
+  editCourse: builder.mutation<Courses, { id: string; course: Partial<Courses> }>({
+    query: ({ id, course }) => ({
+      url: `/courses/${id}`,
+      method: 'PUT',
+      body: course,
+    }),
+    invalidatesTags: ['Courses'],
+  }),
+
+  deleteCourse: builder.mutation<void, string>({
+    query: (id) => ({
+      url: `/courses/${id}`,
+      method: 'DELETE',
+    }),
+    invalidatesTags: ['Courses'],
+  }),
+
+  fetchCourseById: builder.query<Courses, string>({
+    query: (id) => `/courses/${id}`,
+  })
+
   }),
 });
 
@@ -297,6 +339,11 @@ export const {
   useUpdateClassMutation,
   useDeleteClassMutation,  
   useFetchClassByIdQuery,
+  useFetchAllCoursesQuery,
+  useAddCourseMutation,
+  useEditCourseMutation,
+  useDeleteCourseMutation,
+  useFetchCourseByIdQuery
 } = api;
 
 
